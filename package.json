@@ -1,15 +1,75 @@
 {
-  "name": "sms-gateway-db",
+  "name": "@pague-co-uk/sms-gateway-db",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "description": "Shared Prisma database package for the Pague SMS Gateway platform.",
+  "license": "MIT",
+  "author": "Pague Limited",
+  "homepage": "https://github.com/pague-co-uk/sms-gateway-db",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pague-co-uk/sms-gateway-db.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "bugs": {
+    "url": "https://github.com/pague-co-uk/sms-gateway-db/issues"
+  },
+  "keywords": [
+    "prisma",
+    "nestjs",
+    "mysql",
+    "database",
+    "sms-gateway",
+    "pague"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "prisma"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "format": "prisma format",
+    "validate": "prisma validate",
+    "generate": "prisma generate",
+    "migrate": "prisma migrate dev",
+    "deploy": "prisma migrate deploy",
+    "studio": "prisma studio",
+    "seed": "tsx prisma/seed.ts",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/config": "^4.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/terminus": "^11.0.0"
+  },
+  "dependencies": {
+    "@prisma/client": "6.16.3"
+  },
   "devDependencies": {
-    "typescript": "^7.0.2"
+    "@types/node": "^24.0.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.6.2",
+    "prisma": "6.16.3",
+    "tsup": "^8.5.1",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
   }
 }
