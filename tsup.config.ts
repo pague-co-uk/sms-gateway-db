@@ -1,15 +1,18 @@
-import { defineConfig } from 'tsup';
+import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entry: ['src/index.ts'],
+  entry: [
+    "src/index.ts",
+    "src/create-client.ts",
+  ],
 
-  outDir: 'dist',
+  outDir: "dist",
 
-  format: ['esm', 'cjs'],
+  format: ["esm", "cjs"],
 
-  target: 'node22',
+  target: "node22",
 
-  platform: 'node',
+  platform: "node",
 
   bundle: false,
 
