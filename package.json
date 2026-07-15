@@ -1,6 +1,6 @@
 {
   "name": "@pague-co-uk/sms-gateway-db",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Canonical Prisma schema, migrations, seeders and shared database assets for the Pague SMS Gateway platform.",
   "license": "MIT",
   "author": "Pague Limited",
@@ -68,6 +68,6 @@
     "vitest": "^3.2.4"
   },
   "bin": {
-  "pague-db": "./bin/pague-db.js"
-}
+    "pague-db": "./bin/pague-db.js"
+  }
 }
