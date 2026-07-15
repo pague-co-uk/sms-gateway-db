@@ -1,7 +1,7 @@
 {
   "name": "@pague-co-uk/sms-gateway-db",
-  "version": "1.0.1",
-  "description": "Shared Prisma database package for the Pague SMS Gateway platform.",
+  "version": "2.0.0",
+  "description": "Canonical Prisma schema, migrations, seeders and shared database assets for the Pague SMS Gateway platform.",
   "license": "MIT",
   "author": "Pague Limited",
   "homepage": "https://github.com/pague-co-uk/sms-gateway-db",
@@ -14,9 +14,10 @@
   },
   "keywords": [
     "prisma",
-    "nestjs",
     "mysql",
     "database",
+    "schema",
+    "migrations",
     "sms-gateway",
     "pague"
   ],
@@ -45,24 +46,18 @@
     "format": "prisma format",
     "validate": "prisma validate",
     "generate": "prisma generate",
+    "prepare": "prisma generate",
     "migrate": "prisma migrate dev",
     "deploy": "prisma migrate deploy",
     "studio": "prisma studio",
     "seed": "tsx prisma/seed.ts",
     "lint": "eslint .",
     "test": "vitest run",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run validate && npm run build"
   },
-  "peerDependencies": {
-    "@nestjs/common": "^11.0.0",
-    "@nestjs/config": "^4.0.0",
-    "@nestjs/core": "^11.0.0",
-    "@nestjs/terminus": "^11.0.0"
-  },
-  "dependencies": {
-    "@prisma/client": "6.16.3"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "@prisma/client": "6.16.3",
     "@types/node": "^24.0.0",
     "eslint": "^9.0.0",
     "prettier": "^3.6.2",
@@ -71,5 +66,8 @@
     "tsx": "^4.20.5",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
-  }
+  },
+  "bin": {
+  "pague-db": "./bin/pague-db.js"
+}
 }

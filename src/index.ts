@@ -1,2 +1,7 @@
-export { Prisma, PrismaClient } from "@prisma/client";
-export { createPrismaClient } from "./create-client.js";
+// Intentionally empty.
+//
+// This package provides the canonical Prisma schema, migrations,
+// seeders and CLI tooling.
+//
+// Applications generate and own their own Prisma Client.
+export {};
