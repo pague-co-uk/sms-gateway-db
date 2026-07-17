@@ -37,7 +37,7 @@ function checkPrismaVersion() {
   if (result.error || result.status !== 0) {
     console.error(
       "✗ Prisma CLI is not installed.\n\n" +
-        `Install the required version:\n\n` +
+        `Install the recommended version:\n\n` +
         `  npm install prisma@${REQUIRED_PRISMA_VERSION} @prisma/client@${REQUIRED_PRISMA_VERSION}\n`,
     );
 
@@ -49,22 +49,27 @@ function checkPrismaVersion() {
   const match = output.match(/Prisma CLI\s*:\s*([\d.]+)/);
 
   if (!match) {
-    console.error("✗ Unable to determine Prisma CLI version.");
-    process.exit(1);
+    console.warn(
+      "⚠ Unable to determine the installed Prisma CLI version. Continuing anyway...\n",
+    );
+    return;
   }
 
   const installedVersion = match[1];
 
   if (installedVersion !== REQUIRED_PRISMA_VERSION) {
-    console.error(
-      `✗ Unsupported Prisma version.\n\n` +
-        `Installed : ${installedVersion}\n` +
-        `Required  : ${REQUIRED_PRISMA_VERSION}\n\n` +
-        `Run:\n\n` +
-        `  npm install prisma@${REQUIRED_PRISMA_VERSION} @prisma/client@${REQUIRED_PRISMA_VERSION}\n`,
+    console.warn(
+      [
+        "⚠ Prisma version mismatch.",
+        `   Installed  : ${installedVersion}`,
+        `   Recommended: ${REQUIRED_PRISMA_VERSION}`,
+        "",
+        "Continuing anyway. If you encounter issues, install the recommended version:",
+        "",
+        `  npm install prisma@${REQUIRED_PRISMA_VERSION} @prisma/client@${REQUIRED_PRISMA_VERSION}`,
+        "",
+      ].join("\n"),
     );
-
-    process.exit(1);
   }
 }
 
@@ -142,9 +147,14 @@ Commands
   studio      Run prisma studio
   help        Show this help
 
-Required Prisma Version
+Recommended Prisma Version
 
   ${REQUIRED_PRISMA_VERSION}
+
+Note
+
+  Other Prisma versions may work, but the version above is the one
+  officially tested and recommended for this package.
 `);
 }
 
