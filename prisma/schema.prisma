@@ -1,5 +1,5 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -85,6 +85,99 @@ enum MessageEncoding {
   BINARY
 }
 
+enum MfaMethod {
+  EMAIL
+  SMS
+}
+
+enum VerificationPurpose {
+  LOGIN
+  PASSWORD_RESET
+  EMAIL_VERIFICATION
+  PHONE_VERIFICATION
+}
+
+enum VerificationChannel {
+  EMAIL
+  SMS
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  EXPIRED
+  CANCELLED
+  FAILED
+}
+
+enum AuthenticationMethod {
+  PASSWORD
+  API_KEY
+  REFRESH_TOKEN
+  SESSION
+  SMPP
+  SYSTEM
+}
+
+model VerificationChallenge {
+  id String @id @default(uuid()) @db.Char(36)
+
+  userId String @db.Char(36)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  codeHash String @db.VarChar(255)
+
+  purpose VerificationPurpose
+
+  channel VerificationChannel
+
+  status VerificationStatus @default(PENDING)
+
+  attempts Int @default(0)
+
+  expiresAt DateTime
+
+  verifiedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@index([status])
+  @@index([userId, purpose])
+  @@map("verification_challenges")
+}
+
+model TrustedDevice {
+  id String @id @default(uuid()) @db.Char(36)
+
+  userId String @db.Char(36)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  deviceId String @unique @db.VarChar(64)
+
+  deviceName String? @db.VarChar(255)
+
+  userAgent String? @db.VarChar(512)
+
+  ipAddress String? @db.VarChar(45)
+
+  expiresAt DateTime
+
+  lastUsedAt DateTime
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  sessions PortalSession[]
+
+  @@index([userId])
+  @@map("trusted_devices")
+}
+
 model Client {
   /// Primary Key
   id String @id @default(uuid()) @db.Char(36)
@@ -141,6 +234,20 @@ model User {
 
   email String @db.VarChar(255)
 
+  phone String? @db.VarChar(30)
+
+  mfaEnabled Boolean @default(false)
+
+  preferredMfaMethod MfaMethod?
+
+  emailVerifiedAt DateTime?
+
+  phoneVerifiedAt DateTime?
+
+  failedLoginAttempts Int @default(0)
+
+  lockedUntil DateTime?
+
   /// Authentication
   passwordHash String @db.VarChar(255)
 
@@ -160,6 +267,10 @@ model User {
   authenticationEvents AuthenticationEvent[]
 
   floatLedgerEntries FloatLedgerEntry[]
+
+  verificationChallenges VerificationChallenge[]
+
+  trustedDevices TrustedDevice[]
 
   auditLogs AuditLog[]
 
@@ -275,7 +386,7 @@ model ApiKey {
 
   prefix String @db.VarChar(20)
 
-  keyHash String @db.VarChar(255)
+  secretHash String @db.VarChar(255)
 
   status ApiKeyStatus @default(ACTIVE)
 
@@ -322,6 +433,12 @@ model PortalSession {
 
   revokedAt DateTime?
 
+  trustedDeviceId String? @db.Char(36)
+
+  trustedDevice TrustedDevice? @relation(fields: [trustedDeviceId], references: [id], onDelete: SetNull)
+
+  authenticatedWithMfa Boolean @default(false)
+
   /// Audit
   createdAt DateTime @default(now())
 
@@ -330,6 +447,7 @@ model PortalSession {
   @@index([userId])
   @@index([expiresAt])
   @@index([lastActivityAt])
+  @@index([trustedDeviceId])
   @@map("portal_sessions")
 }
 
@@ -350,7 +468,7 @@ model RefreshToken {
   previous RefreshToken[] @relation("RefreshTokenReplacement")
 
   /// Token
-  tokenHash String @db.VarChar(255)
+  tokenHash String @unique @db.VarChar(255)
 
   expiresAt DateTime
 
@@ -373,6 +491,8 @@ model AuthenticationEvent {
   userId String? @db.Char(36)
 
   clientId String? @db.Char(36)
+
+  authenticationMethod AuthenticationMethod
 
   /// Relationships
   user User? @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade)
