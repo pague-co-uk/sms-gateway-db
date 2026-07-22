@@ -494,8 +494,9 @@ model AuthenticationEvent {
 
   authenticationMethod AuthenticationMethod
 
+  sessionId String?
   /// Relationships
-  user User? @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  user      User?   @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
   client Client? @relation(fields: [clientId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
