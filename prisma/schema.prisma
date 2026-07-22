@@ -77,6 +77,7 @@ enum AuthenticationEventType {
   API_KEY_REVOKED
   PASSWORD_CHANGED
   REFRESH_TOKEN_ROTATED
+  MFA_CHALLENGE_CREATED
 }
 
 enum MessageEncoding {
