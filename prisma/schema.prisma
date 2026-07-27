@@ -390,7 +390,7 @@ model ApiKey {
   /// Business Fields
   name String @db.VarChar(100)
 
-  prefix String @db.VarChar(20)
+  prefix String @unique @db.VarChar(20)
 
   secretHash String @db.VarChar(255)
 
