@@ -1,0 +1,2254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model Diagram</title>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11.6.0/dist/mermaid.min.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .controls {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      border: 1px solid #dee2e6;
+    }
+
+    .controls label {
+      margin-right: 15px;
+      cursor: pointer;
+    }
+
+    .controls input[type="checkbox"] {
+      margin-right: 5px;
+    }
+
+    #diagram {
+      margin-top: 20px;
+      overflow-x: auto;
+    }
+
+    .mermaid {
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Model Diagram</h1>
+    <div class="controls">
+      <label>
+        <input type="checkbox" id="showFields" checked>
+        Show Fields
+      </label>
+      <label>
+        <input type="checkbox" id="showTypes" checked>
+        Show Field Types
+      </label>
+      <label>
+        <input type="checkbox" id="showOneToOne" checked>
+        Show One-to-One Relations
+      </label>
+      <label>
+        <input type="checkbox" id="showOneToMany" checked>
+        Show One-to-Many Relations
+      </label>
+      <label>
+        <input type="checkbox" id="showManyToMany" checked>
+        Show Many-to-Many Relations
+      </label>
+    </div>
+    <div id="diagram">
+      <pre class="mermaid">
+                classDiagram
+  class VerificationChallenge {
+    -id : string
+    -userId : string
+    -user : reference
+    -codeHash : string
+    -purpose : enum
+    -channel : enum
+    -status : enum
+    -attempts : number
+    -expiresAt : date
+    -verifiedAt : date
+    -createdAt : date
+  }
+
+  class TrustedDevice {
+    -id : string
+    -userId : string
+    -user : reference
+    -deviceId : string
+    -deviceName : string
+    -userAgent : string
+    -ipAddress : string
+    -expiresAt : date
+    -lastUsedAt : date
+    -createdAt : date
+    -updatedAt : date
+    -sessions : reference
+  }
+
+  class User {
+    -id : string
+    -clientId : string
+    -firstName : string
+    -lastName : string
+    -username : string
+    -email : string
+    -phone : string
+    -mfaEnabled : boolean
+    -preferredMfaMethod : enum
+    -emailVerifiedAt : date
+    -phoneVerifiedAt : date
+    -failedLoginAttempts : number
+    -lockedUntil : date
+    -passwordHash : string
+    -status : enum
+    -lastLoginAt : date
+    -client : reference
+    -userRoles : reference
+    -portalSessions : reference
+    -authenticationEvents : reference
+    -floatLedgerEntries : reference
+    -verificationChallenges : reference
+    -trustedDevices : reference
+    -auditLogs : reference
+    -createdAt : date
+    -updatedAt : date
+  }
+
+  class Role {
+    -id : string
+    -name : string
+    -description : string
+    -system : boolean
+    -userRoles : reference
+    -permissions : reference
+    -createdAt : date
+    -updatedAt : date
+  }
+
+  class Permission {
+    -id : string
+    -name : string
+    -module : string
+    -description : string
+    -roles : reference
+    -createdAt : date
+  }
+
+  class UserRole {
+    -userId : string
+    -roleId : string
+    -user : reference
+    -role : reference
+    -assignedAt : date
+  }
+
+  class RolePermission {
+    -roleId : string
+    -permissionId : string
+    -role : reference
+    -permission : reference
+    -assignedAt : date
+  }
+
+  class ApiKey {
+    -id : string
+    -publicId : string
+    -clientId : string
+    -client : reference
+    -name : string
+    -prefix : string
+    -secretHash : string
+    -status : enum
+    -lastUsedAt : date
+    -expiresAt : date
+    -revokedAt : date
+    -createdAt : date
+    -updatedAt : date
+  }
+
+  class PortalSession {
+    -id : string
+    -userId : string
+    -user : reference
+    -refreshTokens : reference
+    -sessionTokenHash : string
+    -ipAddress : string
+    -userAgent : string
+    -lastActivityAt : date
+    -expiresAt : date
+    -revokedAt : date
+    -trustedDeviceId : string
+    -trustedDevice : reference
+    -authenticatedWithMfa : boolean
+    -createdAt : date
+    -updatedAt : date
+  }
+
+  class RefreshToken {
+    -id : string
+    -sessionId : string
+    -replacedById : string
+    -session : reference
+    -replacedBy : reference
+    -previous : reference
+    -tokenHash : string
+    -expiresAt : date
+    -revokedAt : date
+    -createdAt : date
+  }
+
+  class FloatLedgerEntry {
+    -id : string
+    -publicId : string
+    -clientId : string
+    -createdById : string
+    -client : reference
+    -createdBy : reference
+    -transactionType : enum
+    -credits : number
+    -referenceType : enum
+    -referenceId : string
+    -description : string
+    -createdAt : date
+  }
+
+  class Message {
+    -id : string
+    -publicId : string
+    -clientId : string
+    -senderIdId : string
+    -client : reference
+    -senderId : reference
+    -attempts : reference
+    -statusEvents : reference
+    -destination : string
+    -body : string
+    -encoding : enum
+    -segmentCount : number
+    -currentStatus : enum
+    -submittedAt : date
+    -createdAt : date
+    -updatedAt : date
+    -webhookDeliveries : reference
+  }
+
+  class MessageAttempt {
+    -id : string
+    -messageId : string
+    -message : reference
+    -attemptNumber : number
+    -status : enum
+    -provider : string
+    -route : string
+    -providerMessageId : string
+    -errorCode : string
+    -errorMessage : string
+    -startedAt : date
+    -completedAt : date
+    -createdAt : date
+    -messageStatusEvents : reference
+  }
+
+  class SmppAccount {
+    -id : string
+    -publicId : string
+    -clientId : string
+    -client : reference
+    -systemId : string
+    -passwordHash : string
+    -status : enum
+    -maxConcurrentBinds : number
+    -enquireLinkInterval : number
+    -createdAt : date
+    -updatedAt : date
+  }
+
+  class SenderId {
+    -id : string
+    -publicId : string
+    -clientId : string
+    -client : reference
+    -messages : reference
+    -sender : string
+    -status : enum
+    -isDefault : boolean
+    -createdAt : date
+    -updatedAt : date
+  }
+
+  class WebhookEndpoint {
+    -id : string
+    -publicId : string
+    -clientId : string
+    -client : reference
+    -deliveries : reference
+    -name : string
+    -url : string
+    -secret : string
+    -enabled : boolean
+    -createdAt : date
+    -updatedAt : date
+  }
+
+  class WebhookDelivery {
+    -id : string
+    -webhookEndpointId : string
+    -messageId : string
+    -webhookEndpoint : reference
+    -message : reference
+    -attemptNumber : number
+    -responseCode : number
+    -responseBody : string
+    -attemptedAt : date
+  }
+
+  class AuditLog {
+    -id : string
+    -clientId : string
+    -userId : string
+    -client : reference
+    -user : reference
+    -entityType : string
+    -entityId : string
+    -action : string
+    -oldValues : object
+    -newValues : object
+    -ipAddress : string
+    -userAgent : string
+    -createdAt : date
+  }
+
+  VerificationChallenge "*" --o "1" User : user
+  TrustedDevice "*" --o "1" User : user
+  TrustedDevice "1" --> "*" PortalSession : sessions
+  User "*" --o "1" Client : client
+  User "*" --o "1" UserRole : userRoles
+  User "1" -- "1" PortalSession : portalSessions
+  User "1" -- "1" FloatLedgerEntry : floatLedgerEntries
+  User "1" -- "1" VerificationChallenge : verificationChallenges
+  User "1" -- "1" TrustedDevice : trustedDevices
+  User "1" -- "1" AuditLog : auditLogs
+  Role "1" -- "1" UserRole : userRoles
+  Role "1" -- "1" Permission : permissions
+  Permission "1" -- "1" Role : roles
+  UserRole "*" --o "*" Role : userId
+  UserRole "*" --o "*" User : roleId
+  UserRole "*" --o "1" User : user
+  UserRole "*" --o "1" Role : role
+  RolePermission "*" --o "*" Permission : roleId
+  RolePermission "*" --o "*" Role : permissionId
+  RolePermission "*" --o "1" Role : role
+  RolePermission "*" --o "1" Permission : permission
+  ApiKey "*" --o "1" Client : client
+  PortalSession "*" --o "1" User : user
+  PortalSession "1" -- "1" RefreshToken : refreshTokens
+  PortalSession "*" --o "1" TrustedDevice : trustedDevice
+  RefreshToken "*" --o "1" PortalSession : session
+  RefreshToken "*" --o "1" RefreshToken : replacedBy
+  RefreshToken "*" --o "1" RefreshToken : previous
+  FloatLedgerEntry "*" --o "1" Client : client
+  FloatLedgerEntry "*" --o "1" User : createdBy
+  Message "*" --o "1" Client : client
+  Message "*" --o "1" SenderId : senderId
+  Message "1" --> "*" MessageAttempt : attempts
+  Message "1" -- "1" WebhookDelivery : webhookDeliveries
+  MessageAttempt "*" --o "1" Message : message
+  MessageAttempt "1" -- "1" Message : messageStatusEvents
+  SmppAccount "*" --o "1" Client : client
+  SenderId "*" --o "1" Client : client
+  SenderId "1" -- "1" Message : messages
+  WebhookEndpoint "*" --o "1" Client : client
+  WebhookDelivery "*" --o "1" WebhookEndpoint : webhookEndpoint
+  WebhookDelivery "*" --o "1" Message : message
+  AuditLog "*" --o "1" Client : client
+  AuditLog "*" --o "1" User : user
+
+            </pre>
+    </div>
+  </div>
+  <script>
+    // Initialize Mermaid
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      flowchart: {
+        useMaxWidth: false,
+        htmlLabels: true
+      }
+    });
+
+    // Store the original diagram
+    const originalDiagram = "classDiagram\n  class VerificationChallenge {\n    -id : string\n    -userId : string\n    -user : reference\n    -codeHash : string\n    -purpose : enum\n    -channel : enum\n    -status : enum\n    -attempts : number\n    -expiresAt : date\n    -verifiedAt : date\n    -createdAt : date\n  }\n\n  class TrustedDevice {\n    -id : string\n    -userId : string\n    -user : reference\n    -deviceId : string\n    -deviceName : string\n    -userAgent : string\n    -ipAddress : string\n    -expiresAt : date\n    -lastUsedAt : date\n    -createdAt : date\n    -updatedAt : date\n    -sessions : reference\n  }\n\n  class User {\n    -id : string\n    -clientId : string\n    -firstName : string\n    -lastName : string\n    -username : string\n    -email : string\n    -phone : string\n    -mfaEnabled : boolean\n    -preferredMfaMethod : enum\n    -emailVerifiedAt : date\n    -phoneVerifiedAt : date\n    -failedLoginAttempts : number\n    -lockedUntil : date\n    -passwordHash : string\n    -status : enum\n    -lastLoginAt : date\n    -client : reference\n    -userRoles : reference\n    -portalSessions : reference\n    -authenticationEvents : reference\n    -floatLedgerEntries : reference\n    -verificationChallenges : reference\n    -trustedDevices : reference\n    -auditLogs : reference\n    -createdAt : date\n    -updatedAt : date\n  }\n\n  class Role {\n    -id : string\n    -name : string\n    -description : string\n    -system : boolean\n    -userRoles : reference\n    -permissions : reference\n    -createdAt : date\n    -updatedAt : date\n  }\n\n  class Permission {\n    -id : string\n    -name : string\n    -module : string\n    -description : string\n    -roles : reference\n    -createdAt : date\n  }\n\n  class UserRole {\n    -userId : string\n    -roleId : string\n    -user : reference\n    -role : reference\n    -assignedAt : date\n  }\n\n  class RolePermission {\n    -roleId : string\n    -permissionId : string\n    -role : reference\n    -permission : reference\n    -assignedAt : date\n  }\n\n  class ApiKey {\n    -id : string\n    -publicId : string\n    -clientId : string\n    -client : reference\n    -name : string\n    -prefix : string\n    -secretHash : string\n    -status : enum\n    -lastUsedAt : date\n    -expiresAt : date\n    -revokedAt : date\n    -createdAt : date\n    -updatedAt : date\n  }\n\n  class PortalSession {\n    -id : string\n    -userId : string\n    -user : reference\n    -refreshTokens : reference\n    -sessionTokenHash : string\n    -ipAddress : string\n    -userAgent : string\n    -lastActivityAt : date\n    -expiresAt : date\n    -revokedAt : date\n    -trustedDeviceId : string\n    -trustedDevice : reference\n    -authenticatedWithMfa : boolean\n    -createdAt : date\n    -updatedAt : date\n  }\n\n  class RefreshToken {\n    -id : string\n    -sessionId : string\n    -replacedById : string\n    -session : reference\n    -replacedBy : reference\n    -previous : reference\n    -tokenHash : string\n    -expiresAt : date\n    -revokedAt : date\n    -createdAt : date\n  }\n\n  class FloatLedgerEntry {\n    -id : string\n    -publicId : string\n    -clientId : string\n    -createdById : string\n    -client : reference\n    -createdBy : reference\n    -transactionType : enum\n    -credits : number\n    -referenceType : enum\n    -referenceId : string\n    -description : string\n    -createdAt : date\n  }\n\n  class Message {\n    -id : string\n    -publicId : string\n    -clientId : string\n    -senderIdId : string\n    -client : reference\n    -senderId : reference\n    -attempts : reference\n    -statusEvents : reference\n    -destination : string\n    -body : string\n    -encoding : enum\n    -segmentCount : number\n    -currentStatus : enum\n    -submittedAt : date\n    -createdAt : date\n    -updatedAt : date\n    -webhookDeliveries : reference\n  }\n\n  class MessageAttempt {\n    -id : string\n    -messageId : string\n    -message : reference\n    -attemptNumber : number\n    -status : enum\n    -provider : string\n    -route : string\n    -providerMessageId : string\n    -errorCode : string\n    -errorMessage : string\n    -startedAt : date\n    -completedAt : date\n    -createdAt : date\n    -messageStatusEvents : reference\n  }\n\n  class SmppAccount {\n    -id : string\n    -publicId : string\n    -clientId : string\n    -client : reference\n    -systemId : string\n    -passwordHash : string\n    -status : enum\n    -maxConcurrentBinds : number\n    -enquireLinkInterval : number\n    -createdAt : date\n    -updatedAt : date\n  }\n\n  class SenderId {\n    -id : string\n    -publicId : string\n    -clientId : string\n    -client : reference\n    -messages : reference\n    -sender : string\n    -status : enum\n    -isDefault : boolean\n    -createdAt : date\n    -updatedAt : date\n  }\n\n  class WebhookEndpoint {\n    -id : string\n    -publicId : string\n    -clientId : string\n    -client : reference\n    -deliveries : reference\n    -name : string\n    -url : string\n    -secret : string\n    -enabled : boolean\n    -createdAt : date\n    -updatedAt : date\n  }\n\n  class WebhookDelivery {\n    -id : string\n    -webhookEndpointId : string\n    -messageId : string\n    -webhookEndpoint : reference\n    -message : reference\n    -attemptNumber : number\n    -responseCode : number\n    -responseBody : string\n    -attemptedAt : date\n  }\n\n  class AuditLog {\n    -id : string\n    -clientId : string\n    -userId : string\n    -client : reference\n    -user : reference\n    -entityType : string\n    -entityId : string\n    -action : string\n    -oldValues : object\n    -newValues : object\n    -ipAddress : string\n    -userAgent : string\n    -createdAt : date\n  }\n\n  VerificationChallenge \"*\" --o \"1\" User : user\n  TrustedDevice \"*\" --o \"1\" User : user\n  TrustedDevice \"1\" --> \"*\" PortalSession : sessions\n  User \"*\" --o \"1\" Client : client\n  User \"*\" --o \"1\" UserRole : userRoles\n  User \"1\" -- \"1\" PortalSession : portalSessions\n  User \"1\" -- \"1\" FloatLedgerEntry : floatLedgerEntries\n  User \"1\" -- \"1\" VerificationChallenge : verificationChallenges\n  User \"1\" -- \"1\" TrustedDevice : trustedDevices\n  User \"1\" -- \"1\" AuditLog : auditLogs\n  Role \"1\" -- \"1\" UserRole : userRoles\n  Role \"1\" -- \"1\" Permission : permissions\n  Permission \"1\" -- \"1\" Role : roles\n  UserRole \"*\" --o \"*\" Role : userId\n  UserRole \"*\" --o \"*\" User : roleId\n  UserRole \"*\" --o \"1\" User : user\n  UserRole \"*\" --o \"1\" Role : role\n  RolePermission \"*\" --o \"*\" Permission : roleId\n  RolePermission \"*\" --o \"*\" Role : permissionId\n  RolePermission \"*\" --o \"1\" Role : role\n  RolePermission \"*\" --o \"1\" Permission : permission\n  ApiKey \"*\" --o \"1\" Client : client\n  PortalSession \"*\" --o \"1\" User : user\n  PortalSession \"1\" -- \"1\" RefreshToken : refreshTokens\n  PortalSession \"*\" --o \"1\" TrustedDevice : trustedDevice\n  RefreshToken \"*\" --o \"1\" PortalSession : session\n  RefreshToken \"*\" --o \"1\" RefreshToken : replacedBy\n  RefreshToken \"*\" --o \"1\" RefreshToken : previous\n  FloatLedgerEntry \"*\" --o \"1\" Client : client\n  FloatLedgerEntry \"*\" --o \"1\" User : createdBy\n  Message \"*\" --o \"1\" Client : client\n  Message \"*\" --o \"1\" SenderId : senderId\n  Message \"1\" --> \"*\" MessageAttempt : attempts\n  Message \"1\" -- \"1\" WebhookDelivery : webhookDeliveries\n  MessageAttempt \"*\" --o \"1\" Message : message\n  MessageAttempt \"1\" -- \"1\" Message : messageStatusEvents\n  SmppAccount \"*\" --o \"1\" Client : client\n  SenderId \"*\" --o \"1\" Client : client\n  SenderId \"1\" -- \"1\" Message : messages\n  WebhookEndpoint \"*\" --o \"1\" Client : client\n  WebhookDelivery \"*\" --o \"1\" WebhookEndpoint : webhookEndpoint\n  WebhookDelivery \"*\" --o \"1\" Message : message\n  AuditLog \"*\" --o \"1\" Client : client\n  AuditLog \"*\" --o \"1\" User : user\n";
+    const models = [
+      {
+        "name": "VerificationChallenge",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "userId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "user",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "User",
+                "foreignKey": "userId"
+              }
+            ]
+          },
+          {
+            "name": "codeHash",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "purpose",
+            "type": "enum",
+            "isOptional": false,
+            "relationships": [],
+            "constraints": {
+              "enum": [
+                "LOGIN",
+                "PASSWORD_RESET",
+                "EMAIL_VERIFICATION",
+                "PHONE_VERIFICATION"
+              ]
+            }
+          },
+          {
+            "name": "channel",
+            "type": "enum",
+            "isOptional": false,
+            "relationships": [],
+            "constraints": {
+              "enum": [
+                "EMAIL",
+                "SMS"
+              ]
+            }
+          },
+          {
+            "name": "status",
+            "type": "enum",
+            "isOptional": true,
+            "relationships": [],
+            "constraints": {
+              "enum": [
+                "PENDING",
+                "VERIFIED",
+                "EXPIRED",
+                "CANCELLED",
+                "FAILED"
+              ]
+            }
+          },
+          {
+            "name": "attempts",
+            "type": "number",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "expiresAt",
+            "type": "date",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "verifiedAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "createdAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          }
+        ],
+        "filePath": "/home/blessings/Documents/pague/sms-gateway-db/prisma/schema.prisma",
+        "confidence": "high"
+      },
+      {
+        "name": "TrustedDevice",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "userId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "user",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "User",
+                "foreignKey": "userId"
+              }
+            ]
+          },
+          {
+            "name": "deviceId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "deviceName",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "userAgent",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "ipAddress",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "expiresAt",
+            "type": "date",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "lastUsedAt",
+            "type": "date",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "createdAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "updatedAt",
+            "type": "date",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "sessions",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "OneToMany",
+                "targetModel": "PortalSession"
+              }
+            ]
+          }
+        ],
+        "filePath": "/home/blessings/Documents/pague/sms-gateway-db/prisma/schema.prisma",
+        "confidence": "high"
+      },
+      {
+        "name": "User",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "clientId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "firstName",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "lastName",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "username",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "email",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "phone",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "mfaEnabled",
+            "type": "boolean",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "preferredMfaMethod",
+            "type": "enum",
+            "isOptional": true,
+            "relationships": [],
+            "constraints": {
+              "enum": [
+                "EMAIL",
+                "SMS"
+              ]
+            }
+          },
+          {
+            "name": "emailVerifiedAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "phoneVerifiedAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "failedLoginAttempts",
+            "type": "number",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "lockedUntil",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "passwordHash",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "status",
+            "type": "enum",
+            "isOptional": true,
+            "relationships": [],
+            "constraints": {
+              "enum": [
+                "ACTIVE",
+                "LOCKED",
+                "DISABLED"
+              ]
+            }
+          },
+          {
+            "name": "lastLoginAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "client",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "Client",
+                "foreignKey": "clientId"
+              }
+            ]
+          },
+          {
+            "name": "userRoles",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "UserRole"
+              }
+            ]
+          },
+          {
+            "name": "portalSessions",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "OneToOne",
+                "targetModel": "PortalSession"
+              }
+            ]
+          },
+          {
+            "name": "authenticationEvents",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "floatLedgerEntries",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "OneToOne",
+                "targetModel": "FloatLedgerEntry"
+              }
+            ]
+          },
+          {
+            "name": "verificationChallenges",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "OneToOne",
+                "targetModel": "VerificationChallenge"
+              }
+            ]
+          },
+          {
+            "name": "trustedDevices",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "OneToOne",
+                "targetModel": "TrustedDevice"
+              }
+            ]
+          },
+          {
+            "name": "auditLogs",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "OneToOne",
+                "targetModel": "AuditLog"
+              }
+            ]
+          },
+          {
+            "name": "createdAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "updatedAt",
+            "type": "date",
+            "isOptional": false,
+            "relationships": []
+          }
+        ],
+        "filePath": "/home/blessings/Documents/pague/sms-gateway-db/prisma/schema.prisma",
+        "confidence": "high"
+      },
+      {
+        "name": "Role",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "system",
+            "type": "boolean",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "userRoles",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "OneToOne",
+                "targetModel": "UserRole"
+              }
+            ]
+          },
+          {
+            "name": "permissions",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "OneToOne",
+                "targetModel": "Permission"
+              }
+            ]
+          },
+          {
+            "name": "createdAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "updatedAt",
+            "type": "date",
+            "isOptional": false,
+            "relationships": []
+          }
+        ],
+        "filePath": "/home/blessings/Documents/pague/sms-gateway-db/prisma/schema.prisma",
+        "confidence": "high"
+      },
+      {
+        "name": "Permission",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "module",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "roles",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "OneToOne",
+                "targetModel": "Role"
+              }
+            ]
+          },
+          {
+            "name": "createdAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          }
+        ],
+        "filePath": "/home/blessings/Documents/pague/sms-gateway-db/prisma/schema.prisma",
+        "confidence": "high"
+      },
+      {
+        "name": "UserRole",
+        "fields": [
+          {
+            "name": "userId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToMany",
+                "targetModel": "Role",
+                "joinTable": "UserRole"
+              }
+            ]
+          },
+          {
+            "name": "roleId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToMany",
+                "targetModel": "User",
+                "joinTable": "UserRole"
+              }
+            ]
+          },
+          {
+            "name": "user",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "User",
+                "foreignKey": "userId"
+              }
+            ]
+          },
+          {
+            "name": "role",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "Role",
+                "foreignKey": "roleId"
+              }
+            ]
+          },
+          {
+            "name": "assignedAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          }
+        ],
+        "filePath": "/home/blessings/Documents/pague/sms-gateway-db/prisma/schema.prisma",
+        "confidence": "high"
+      },
+      {
+        "name": "RolePermission",
+        "fields": [
+          {
+            "name": "roleId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToMany",
+                "targetModel": "Permission",
+                "joinTable": "RolePermission"
+              }
+            ]
+          },
+          {
+            "name": "permissionId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToMany",
+                "targetModel": "Role",
+                "joinTable": "RolePermission"
+              }
+            ]
+          },
+          {
+            "name": "role",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "Role",
+                "foreignKey": "roleId"
+              }
+            ]
+          },
+          {
+            "name": "permission",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "Permission",
+                "foreignKey": "permissionId"
+              }
+            ]
+          },
+          {
+            "name": "assignedAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          }
+        ],
+        "filePath": "/home/blessings/Documents/pague/sms-gateway-db/prisma/schema.prisma",
+        "confidence": "high"
+      },
+      {
+        "name": "ApiKey",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "publicId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "clientId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "client",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "Client",
+                "foreignKey": "clientId"
+              }
+            ]
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "prefix",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "secretHash",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "status",
+            "type": "enum",
+            "isOptional": true,
+            "relationships": [],
+            "constraints": {
+              "enum": [
+                "ACTIVE",
+                "REVOKED",
+                "EXPIRED"
+              ]
+            }
+          },
+          {
+            "name": "lastUsedAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "expiresAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "revokedAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "createdAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "updatedAt",
+            "type": "date",
+            "isOptional": false,
+            "relationships": []
+          }
+        ],
+        "filePath": "/home/blessings/Documents/pague/sms-gateway-db/prisma/schema.prisma",
+        "confidence": "high"
+      },
+      {
+        "name": "PortalSession",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "userId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "user",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "User",
+                "foreignKey": "userId"
+              }
+            ]
+          },
+          {
+            "name": "refreshTokens",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "OneToOne",
+                "targetModel": "RefreshToken"
+              }
+            ]
+          },
+          {
+            "name": "sessionTokenHash",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "ipAddress",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "userAgent",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "lastActivityAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "expiresAt",
+            "type": "date",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "revokedAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "trustedDeviceId",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "trustedDevice",
+            "type": "reference",
+            "isOptional": true,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "TrustedDevice",
+                "foreignKey": "trustedDeviceId"
+              }
+            ]
+          },
+          {
+            "name": "authenticatedWithMfa",
+            "type": "boolean",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "createdAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "updatedAt",
+            "type": "date",
+            "isOptional": false,
+            "relationships": []
+          }
+        ],
+        "filePath": "/home/blessings/Documents/pague/sms-gateway-db/prisma/schema.prisma",
+        "confidence": "high"
+      },
+      {
+        "name": "RefreshToken",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "sessionId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "replacedById",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "session",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "PortalSession",
+                "foreignKey": "sessionId"
+              }
+            ]
+          },
+          {
+            "name": "replacedBy",
+            "type": "reference",
+            "isOptional": true,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "RefreshToken",
+                "foreignKey": "replacedById"
+              }
+            ]
+          },
+          {
+            "name": "previous",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "RefreshToken"
+              }
+            ]
+          },
+          {
+            "name": "tokenHash",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "expiresAt",
+            "type": "date",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "revokedAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "createdAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          }
+        ],
+        "filePath": "/home/blessings/Documents/pague/sms-gateway-db/prisma/schema.prisma",
+        "confidence": "high"
+      },
+      {
+        "name": "FloatLedgerEntry",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "publicId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "clientId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "createdById",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "client",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "Client",
+                "foreignKey": "clientId"
+              }
+            ]
+          },
+          {
+            "name": "createdBy",
+            "type": "reference",
+            "isOptional": true,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "User",
+                "foreignKey": "createdById"
+              }
+            ]
+          },
+          {
+            "name": "transactionType",
+            "type": "enum",
+            "isOptional": false,
+            "relationships": [],
+            "constraints": {
+              "enum": [
+                "TOPUP",
+                "DEBIT",
+                "REFUND",
+                "ADJUSTMENT"
+              ]
+            }
+          },
+          {
+            "name": "credits",
+            "type": "number",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "referenceType",
+            "type": "enum",
+            "isOptional": false,
+            "relationships": [],
+            "constraints": {
+              "enum": [
+                "MESSAGE",
+                "ADMIN",
+                "SYSTEM",
+                "IMPORT"
+              ]
+            }
+          },
+          {
+            "name": "referenceId",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "createdAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          }
+        ],
+        "filePath": "/home/blessings/Documents/pague/sms-gateway-db/prisma/schema.prisma",
+        "confidence": "high"
+      },
+      {
+        "name": "Message",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "publicId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "clientId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "senderIdId",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "client",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "Client",
+                "foreignKey": "clientId"
+              }
+            ]
+          },
+          {
+            "name": "senderId",
+            "type": "reference",
+            "isOptional": true,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "SenderId",
+                "foreignKey": "senderIdId"
+              }
+            ]
+          },
+          {
+            "name": "attempts",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "OneToMany",
+                "targetModel": "MessageAttempt"
+              }
+            ]
+          },
+          {
+            "name": "statusEvents",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "destination",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "body",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "encoding",
+            "type": "enum",
+            "isOptional": false,
+            "relationships": [],
+            "constraints": {
+              "enum": [
+                "GSM7",
+                "UCS2",
+                "BINARY"
+              ]
+            }
+          },
+          {
+            "name": "segmentCount",
+            "type": "number",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "currentStatus",
+            "type": "enum",
+            "isOptional": true,
+            "relationships": [],
+            "constraints": {
+              "enum": [
+                "QUEUED",
+                "ROUTED",
+                "SUBMITTED",
+                "DELIVERED",
+                "FAILED",
+                "EXPIRED"
+              ]
+            }
+          },
+          {
+            "name": "submittedAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "createdAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "updatedAt",
+            "type": "date",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "webhookDeliveries",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "OneToOne",
+                "targetModel": "WebhookDelivery"
+              }
+            ]
+          }
+        ],
+        "filePath": "/home/blessings/Documents/pague/sms-gateway-db/prisma/schema.prisma",
+        "confidence": "high"
+      },
+      {
+        "name": "MessageAttempt",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "messageId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "message",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "Message",
+                "foreignKey": "messageId"
+              }
+            ]
+          },
+          {
+            "name": "attemptNumber",
+            "type": "number",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "status",
+            "type": "enum",
+            "isOptional": true,
+            "relationships": [],
+            "constraints": {
+              "enum": [
+                "PENDING",
+                "SUBMITTED",
+                "FAILED"
+              ]
+            }
+          },
+          {
+            "name": "provider",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "route",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "providerMessageId",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "errorCode",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "errorMessage",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "startedAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "completedAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "createdAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "messageStatusEvents",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "OneToOne",
+                "targetModel": "Message"
+              }
+            ]
+          }
+        ],
+        "filePath": "/home/blessings/Documents/pague/sms-gateway-db/prisma/schema.prisma",
+        "confidence": "high"
+      },
+      {
+        "name": "SmppAccount",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "publicId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "clientId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "client",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "Client",
+                "foreignKey": "clientId"
+              }
+            ]
+          },
+          {
+            "name": "systemId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "passwordHash",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "status",
+            "type": "enum",
+            "isOptional": true,
+            "relationships": [],
+            "constraints": {
+              "enum": [
+                "ACTIVE",
+                "DISABLED",
+                "SUSPENDED"
+              ]
+            }
+          },
+          {
+            "name": "maxConcurrentBinds",
+            "type": "number",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "enquireLinkInterval",
+            "type": "number",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "createdAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "updatedAt",
+            "type": "date",
+            "isOptional": false,
+            "relationships": []
+          }
+        ],
+        "filePath": "/home/blessings/Documents/pague/sms-gateway-db/prisma/schema.prisma",
+        "confidence": "high"
+      },
+      {
+        "name": "SenderId",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "publicId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "clientId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "client",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "Client",
+                "foreignKey": "clientId"
+              }
+            ]
+          },
+          {
+            "name": "messages",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "OneToOne",
+                "targetModel": "Message"
+              }
+            ]
+          },
+          {
+            "name": "sender",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "status",
+            "type": "enum",
+            "isOptional": true,
+            "relationships": [],
+            "constraints": {
+              "enum": [
+                "PENDING",
+                "APPROVED",
+                "REJECTED",
+                "DISABLED"
+              ]
+            }
+          },
+          {
+            "name": "isDefault",
+            "type": "boolean",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "createdAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "updatedAt",
+            "type": "date",
+            "isOptional": false,
+            "relationships": []
+          }
+        ],
+        "filePath": "/home/blessings/Documents/pague/sms-gateway-db/prisma/schema.prisma",
+        "confidence": "high"
+      },
+      {
+        "name": "WebhookEndpoint",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "publicId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "clientId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "client",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "Client",
+                "foreignKey": "clientId"
+              }
+            ]
+          },
+          {
+            "name": "deliveries",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "url",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "secret",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "enabled",
+            "type": "boolean",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "createdAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "updatedAt",
+            "type": "date",
+            "isOptional": false,
+            "relationships": []
+          }
+        ],
+        "filePath": "/home/blessings/Documents/pague/sms-gateway-db/prisma/schema.prisma",
+        "confidence": "high"
+      },
+      {
+        "name": "WebhookDelivery",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "webhookEndpointId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "messageId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "webhookEndpoint",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "WebhookEndpoint",
+                "foreignKey": "webhookEndpointId"
+              }
+            ]
+          },
+          {
+            "name": "message",
+            "type": "reference",
+            "isOptional": false,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "Message",
+                "foreignKey": "messageId"
+              }
+            ]
+          },
+          {
+            "name": "attemptNumber",
+            "type": "number",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "responseCode",
+            "type": "number",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "responseBody",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "attemptedAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          }
+        ],
+        "filePath": "/home/blessings/Documents/pague/sms-gateway-db/prisma/schema.prisma",
+        "confidence": "high"
+      },
+      {
+        "name": "AuditLog",
+        "fields": [
+          {
+            "name": "id",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "clientId",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "userId",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "client",
+            "type": "reference",
+            "isOptional": true,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "Client",
+                "foreignKey": "clientId"
+              }
+            ]
+          },
+          {
+            "name": "user",
+            "type": "reference",
+            "isOptional": true,
+            "relationships": [
+              {
+                "type": "ManyToOne",
+                "targetModel": "User",
+                "foreignKey": "userId"
+              }
+            ]
+          },
+          {
+            "name": "entityType",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "entityId",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "action",
+            "type": "string",
+            "isOptional": false,
+            "relationships": []
+          },
+          {
+            "name": "oldValues",
+            "type": "object",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "newValues",
+            "type": "object",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "ipAddress",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "userAgent",
+            "type": "string",
+            "isOptional": true,
+            "relationships": []
+          },
+          {
+            "name": "createdAt",
+            "type": "date",
+            "isOptional": true,
+            "relationships": []
+          }
+        ],
+        "filePath": "/home/blessings/Documents/pague/sms-gateway-db/prisma/schema.prisma",
+        "confidence": "high"
+      }
+    ];
+
+    // Function to update diagram based on controls
+    function updateDiagram() {
+      const showFields = document.getElementById('showFields').checked;
+      const showTypes = document.getElementById('showTypes').checked;
+      const showOneToOne = document.getElementById('showOneToOne').checked;
+      const showOneToMany = document.getElementById('showOneToMany').checked;
+      const showManyToMany = document.getElementById('showManyToMany').checked;
+
+      // Generate new diagram based on settings
+      let diagram = 'classDiagram\n';
+
+      // Add model classes
+      for (const model of models) {
+        diagram += `  class ${model.name} {
+`;
+
+        if (showFields) {
+          for (const field of model.fields) {
+            let fieldLine = '    ';
+
+            // Add primary key indicator
+            if (field.relationships.some(r => r.foreignKey === field.name)) {
+              fieldLine += '+';
+            } else if (field.constraints?.uniqueItems === true) {
+              fieldLine += '#';
+            } else {
+              fieldLine += '-';
+            }
+
+            fieldLine += field.name;
+
+            if (showTypes && field.type) {
+              fieldLine += ` : ${field.type}`;
+              if (field.constraints?.isArray) {
+                fieldLine += '[]';
+              }
+            }
+
+            diagram += `${fieldLine}\n`;
+          }
+        }
+
+        diagram += '  }\n';
+      }
+
+      // Add relationships
+      const processedRelations = new Set();
+
+      for (const model of models) {
+        for (const field of model.fields) {
+          for (const relation of field.relationships) {
+            if (!relation.targetModel) continue;
+
+            const relationKey = `${model.name}-${relation.targetModel}-${relation.type}-${field.name}`;
+            const reverseKey = `${relation.targetModel}-${model.name}-${relation.type}-${field.name}`;
+
+            if (!processedRelations.has(relationKey) && !processedRelations.has(reverseKey)) {
+              processedRelations.add(relationKey);
+
+              let shouldShow = false;
+              let sourceCard = '1';
+              let targetCard = '1';
+
+              switch (relation.type) {
+                case 'OneToMany':
+                  if (showOneToMany) {
+                    sourceCard = '1';
+                    targetCard = '*';
+                    shouldShow = true;
+                  }
+                  break;
+                case 'ManyToOne':
+                  if (showOneToMany) {
+                    sourceCard = '*';
+                    targetCard = '1';
+                    shouldShow = true;
+                  }
+                  break;
+                case 'OneToOne':
+                  if (showOneToOne) {
+                    sourceCard = '1';
+                    targetCard = '1';
+                    shouldShow = true;
+                  }
+                  break;
+                case 'ManyToMany':
+                  if (showManyToMany) {
+                    sourceCard = '*';
+                    targetCard = '*';
+                    shouldShow = true;
+                  }
+                  break;
+              }
+
+              if (shouldShow) {
+                diagram += `  ${model.name} "${sourceCard}" --o "${targetCard}" ${relation.targetModel} : ${field.name}\n`;
+              }
+            }
+          }
+        }
+      }
+
+      // Update the diagram
+      const diagramDiv = document.getElementById('diagram');
+      diagramDiv.innerHTML = `<pre class="mermaid">${diagram}</pre>`;
+
+      // Re-render mermaid diagram
+      mermaid.init(undefined, '.mermaid');
+    }
+
+    // Add event listeners to controls
+    document.getElementById('showFields').addEventListener('change', updateDiagram);
+    document.getElementById('showTypes').addEventListener('change', updateDiagram);
+    document.getElementById('showOneToOne').addEventListener('change', updateDiagram);
+    document.getElementById('showOneToMany').addEventListener('change', updateDiagram);
+    document.getElementById('showManyToMany').addEventListener('change', updateDiagram);
+  </script>
+</body>
+
+</html>
