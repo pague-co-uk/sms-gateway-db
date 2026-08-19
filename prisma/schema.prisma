@@ -16,6 +16,7 @@ enum ClientStatus {
 
 enum OutboxEventStatus {
   PENDING
+  PROCESSING
   PUBLISHED
   FAILED
 }
@@ -923,8 +924,9 @@ model OutboxEvent {
   lastError String? @db.VarChar(1000)
 
   /// Audit
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  processingAt DateTime?
 
   @@index([status, availableAt])
   @@index([aggregateType, aggregateId])
