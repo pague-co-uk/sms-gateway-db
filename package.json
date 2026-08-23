@@ -55,7 +55,9 @@
     "test": "vitest run",
     "prepublishOnly": "npm run validate && npm run build"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@pague-co-uk/sms-gateway-db": "^3.0.12"
+  },
   "devDependencies": {
     "@prisma/client": "6.16.3",
     "@types/node": "^24.0.0",
