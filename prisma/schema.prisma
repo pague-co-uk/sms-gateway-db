@@ -701,6 +701,7 @@ model MessageRouteAttempt {
   updatedAt DateTime @updatedAt
 
   @@unique([messageId, attemptNumber])
+  @@unique([messageId, routeId])
   @@index([messageId])
   @@index([routeId])
   @@index([connectorId])
