@@ -1037,9 +1037,14 @@ model MobileNetwork {
 
   countryCode String @db.Char(2)
 
-  status MobileNetworkStatus @default(ACTIVE)
+  /// Regular expression describing the numbering range
+  /// allocated to this mobile network.
+  ///
+  /// Example:
+  /// ^265(?:88|89|90)
+  routingRegex String? @db.VarChar(500)
 
-  prefixes MobileNetworkPrefix[]
+  status MobileNetworkStatus @default(ACTIVE)
 
   routes Route[]
 
@@ -1049,29 +1054,6 @@ model MobileNetwork {
   @@index([countryCode])
   @@index([status])
   @@map("mobile_networks")
-}
-
-model MobileNetworkPrefix {
-  id String @id @default(uuid()) @db.Char(36)
-
-  mobileNetworkId String @db.Char(36)
-
-  mobileNetwork MobileNetwork @relation(fields: [mobileNetworkId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-
-  prefix String @db.VarChar(20)
-
-  countryCode String @db.Char(2)
-
-  enabled Boolean @default(true)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([countryCode, prefix])
-  @@index([mobileNetworkId])
-  @@index([prefix])
-  @@index([enabled])
-  @@map("mobile_network_prefixes")
 }
 
 model Connector {
