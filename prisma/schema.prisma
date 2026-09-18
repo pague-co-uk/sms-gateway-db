@@ -1035,13 +1035,20 @@ model MobileNetwork {
 
   code String @unique @db.VarChar(50)
 
-  countryCode String @db.Char(2)
+  countryId String @db.Char(36)
+
+  country Country @relation(fields: [countryId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
   /// Regular expression describing the numbering range
+
   /// allocated to this mobile network.
+
   ///
+
   /// Example:
+
   /// ^265(?:88|89|90)
+
   routingRegex String? @db.VarChar(500)
 
   status MobileNetworkStatus @default(ACTIVE)
@@ -1049,11 +1056,10 @@ model MobileNetwork {
   routes Route[]
 
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  country   Country? @relation(fields: [countryId], references: [id])
-  countryId String?  @db.Char(36)
 
-  @@index([countryCode])
+  updatedAt DateTime @updatedAt
+
+  @@index([countryId])
   @@index([status])
   @@map("mobile_networks")
 }
