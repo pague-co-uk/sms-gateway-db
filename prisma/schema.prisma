@@ -1027,6 +1027,7 @@ model OutboxEvent {
 }
 
 model MobileNetwork {
+
   id String @id @default(uuid()) @db.Char(36)
 
   publicId String @unique @db.VarChar(20)
@@ -1060,8 +1061,11 @@ model MobileNetwork {
   updatedAt DateTime @updatedAt
 
   @@index([countryId])
+
   @@index([status])
+
   @@map("mobile_networks")
+
 }
 
 model Connector {
