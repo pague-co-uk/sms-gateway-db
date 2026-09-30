@@ -1349,6 +1349,8 @@ model ProviderService {
 
   active Boolean @default(true)
 
+  priority Int @default(100)
+
   transactions Transaction[]
 
   createdAt DateTime @default(now())
