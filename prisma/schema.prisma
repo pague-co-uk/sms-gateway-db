@@ -1452,6 +1452,12 @@ model Transaction {
 
   reference String @db.VarChar(100)
 
+  /// Account charged (collection) or credited (payout); null for historical rows.
+  accountNumber String? @db.VarChar(100)
+
+  /// ISO 3166-1 alpha-2 country of the account.
+  country String? @db.Char(2)
+
   providerReference String? @db.VarChar(255)
 
   amount Decimal @db.Decimal(19, 4)
