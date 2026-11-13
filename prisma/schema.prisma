@@ -1223,6 +1223,7 @@ enum PaymentProviderStatus {
 }
 
 enum TransactionStatus {
+  UNKNOWN
   PENDING
   PROCESSING
   SUCCESS
@@ -1467,6 +1468,10 @@ model Transaction {
   metadata Json?
 
   providerResponse Json?
+
+  /// Durable status enquiry schedule; used by Airtel Money polling.
+  statusPollAttempts Int @default(0)
+  nextStatusPollAt DateTime?
 
   processedAt DateTime?
 
